@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.rafaelvicio.springeview.modelo.Demanda;
 import br.com.rafaelvicio.springeview.repository.DemandaRepository;
+import br.com.rafaelvicio.springeview.service.DemandaService;
 
 @Controller
 public class DemandaController {
 
     @Autowired
-    private DemandaRepository demandaRepository;
+    private DemandaService demandaService;
 
     @RequestMapping("/")
     public String index() {
@@ -23,7 +24,7 @@ public class DemandaController {
 
     @RequestMapping("/demandas")
     public String demandas(Model model) {
-        Iterable<Demanda> demandas = demandaRepository.findAll();
+        Iterable<Demanda> demandas = demandaService.obterTodos();
         model.addAttribute("demandas", demandas);
         return "demandas";
     }
@@ -33,9 +34,9 @@ public class DemandaController {
             @RequestParam("telefone") String telefone, Model model) {
 
         Demanda novaDemanda = new Demanda(nome, email, telefone);
-        demandaRepository.save(novaDemanda);
+        demandaService.salvar(novaDemanda);
 
-        Iterable<Demanda> demandas = demandaRepository.findAll();
+        Iterable<Demanda> demandas = demandaService.obterTodos();
         model.addAttribute("demandas", demandas);
 
         return "demandas";
